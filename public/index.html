@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Moving Regions</title>
+  <meta charset="UTF-8">
+  <meta name="slider" content="width=device-width, initial-scale=1.0">
+
+  <script src='//code.jquery.com/jquery-2.0.2.js'></script>
+  <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <link type="text/css" rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="scripts/queries.js"></script>
+  <script src="scripts/parsing.js"></script>
+</head>
+
+<body onload="getRecordNames('cb1')">
+  <div class="tab">
+    <button class="tablinks" onclick="openClass(event, 'List')" id="defaultOpen">Objectlist</button>
+    <button class="tablinks" onclick="openClass(event, 'Load')">Up-/Download</button>
+    <button class="tablinks" onclick="openClass(event, 'Timefilter')">Timefilter</button>
+    <button class="tablinks" onclick="openClass(event, 'LocFilter')">Filter by Location</button>
+    <button class="tablinks" onclick="clearCanvas()"><i class="fa fa-trash" ></i>   Clear Canvas</button>
+  </div>
+
+  <!-- Lists Objects in Combobox -->
+  <div id="List" class="tabcontent" onload="getRecordNames('cb1')">
+    <br>
+    <div class="center">
+      <h3 class="labels">Stored Moving Region Object data: </h3><br>
+      <select class="labels" name="optionlist" id="cb1" style="width:200px; height:25px;"></select>
+      <button class="labels" type="button" id="load" onclick="LoadRecord()">Load selected object</button>
+    </div>
+  </div>
+
+ <!-- Up- and Download Objects -->
+ <form>
+  <div id="Load" class="tabcontent">
+    <div class="block">
+      <h3 class="center">Upload Object Data</h3>
+      <textarea id="object" name="object" style="width:100%" rows="20" class="text" placeholder="Enter here the object. Object has to be in nested list form."></textarea>
+      
+      <div class="center">
+        <h3 class="center">Or select file:</h3>
+        <input class="labels" type="file" id="file-selector" accept=".txt" onchange="loadFile(this.files[0])"><br><br>
+        <br>
+        <button type="button" class="labels" id="submit" onclick="startScript()">Submit</button>
+        
+        
+      </div>
+    </div>
+  </form>
+    <div class="block">
+      <h3 class="center">Download Object Data</h3><br><br><br><br>
+      <div class="block">
+        <div class="center">
+          <input type="radio" name="format" id="nestedFormat" value="NestedList">
+          <label for="nestedFormat">Nested List Format</label><br>
+        </div>
+      </div>
+      <div class="block">
+        <div class="center">
+          <input type="radio" name="format" id="JSON" value="JSON">
+          <label for="JSON">JSON File</label><br>
+        </div>        
+      </div>
+      <br><br>
+      <div class="center">
+        <label class="labels">Stored Object Data: </label><br><br>
+        <select class="labels" name="optionlist" id="cb3" style="width:200px; height:25px;" onfocus="getRecordNames('cb3')"></select><br><br>
+        <button class="labels" type="button" id="load2" onclick="LoadRecordforDownload(this)">Download selected object</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Objects by Time -->
+  <div id="Timefilter" class="tabcontent">
+    <label class="labels">Filter the objects by time:</label>
+    <br/>
+    <label class="labels" for="timemin">min:</label>
+    <input type="datetime-local" id="timemin" name="timemin" placeholder="yyyy-mm-dd hh:mm:ss" min="1970-01-01T00:00" max="2023-06-14T00:00"><br>
+    <label class="labels" for="timemax">max:</label>
+    <input type="datetime-local" id="timemax" name="timemax" placeholder="yyyy-mm-dd hh:mm:ss" min="1970-01-01T00:00" max="2023-06-14T00:00"><br><br>
+    <button class="labels" type="button" id="filterT" onclick="LoadObjectsbyTime()">Show matching objects</button>
+    <select class="labels" name="objectlist" id="cb2" onchange="ShowObject('cb2');" onfocus="this.selectedIndex = -1;"></select>
+  </div>
+
+   <!-- Filter Objects by Location -->
+  <div id="LocFilter" class="tabcontent">
+    <label class="labels">Filter the objects by their location</label><br/><br>
+    <label class="labels" for="x">X-Coordinate:</label>
+    <input type="number" id="x"></input>
+    <label class="labels" for="y">Y-Coordinate</label>
+    <input type="number" id="y"></input>
+    <button class="labels" type="button" id="btnXY" onclick="LoadObjectsbyLoc()">Submit</button>
+    <select name="objectlist" id="cb3" onchange="ShowObject('cb3');" class="labels" onfocus="this.selectedIndex = -1;"></select>
+  </div>
+
+  <div id="time-range">
+    <br>
+    <p><span class="slider-time"></span> <span class="slider-time2"></span> </p>
+  </div>
+
+  <div id="cvs">
+    <canvas class="canvas" id="canvas" name="canvas"></canvas>
+  </div>
+<br><br>
+  <div class="sliders_step1">
+    <div id="slider-range"></div>
+  </div>
+
+  <script>
+    document.getElementById("defaultOpen").click();
+  </script>
+  <script src="scripts/parsing.js"></script>
+  <script src="scripts/queries.js"></script>
+
+</body>
+
+</html>
